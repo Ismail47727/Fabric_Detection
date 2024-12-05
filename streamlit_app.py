@@ -87,13 +87,93 @@
 
 
 
+# import requests
+# import torch
+# from ultralytics import YOLO
+# import streamlit as st
+# from PIL import Image
+# import io
+# import os
+
+# # Download the model weights if not already downloaded
+# def download_model():
+#     url = 'https://github.com/Ismail47727/Fabric_Detection/raw/main/best.pt'  # Model file URL
+#     model_path = 'best.pt'
+#     if not os.path.exists(model_path):  # Check if the model already exists
+#         st.write("Downloading the model... This might take a while.")
+#         response = requests.get(url)
+#         with open(model_path, 'wb') as f:
+#             f.write(response.content)
+#         st.write("Model downloaded successfully!")
+#     return model_path
+
+# # Load YOLO model
+# def load_model(model_path):
+#     model = YOLO(model_path)  # Load the model
+#     return model
+
+# # Run predictions on the uploaded image
+# def run_inference(model, image):
+#     # Convert image to bytes for processing
+#     img = Image.open(image)
+#     results = model(img)  # Make predictions with the model
+#     return results
+
+# def main():
+#     st.sidebar.header("Fabric Defect Detection with YOLOv8")
+#     st.title("Fabric Defect Detection App")
+
+#     # Download the model at runtime if not already downloaded
+#     model_path = download_model()
+
+#     # Load the YOLO model
+#     model = load_model(model_path)
+
+#     st.write("Upload an image to detect fabric defects...")
+
+#     uploaded_image = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
+
+#     if uploaded_image is not None:
+#         # Show uploaded image
+#         st.image(uploaded_image, caption="Uploaded Image", use_column_width=True)
+
+#         # Run inference on the image
+#         st.write("Classifying...")
+
+#         # Run the model on the uploaded image and show results
+#         results = run_inference(model, uploaded_image)
+        
+#         # Show results (you can modify this based on how results are returned)
+#         st.write(f"Predicted Labels: {results.names}")
+#         st.write(f"Prediction Results: {results.xywh[0]}")  # This shows the prediction results
+
+#         # You can visualize the output like bounding boxes here:
+#         img_with_boxes = results.render()  # Add bounding boxes to image
+#         st.image(img_with_boxes[0], caption="Detection Result", use_column_width=True)
+
+# # Run the app
+# if __name__ == "__main__":
+#     main()
+
+
+
+
+
+
+
+
+
+
+
+
+#-------------
+import os
 import requests
 import torch
 from ultralytics import YOLO
 import streamlit as st
 from PIL import Image
 import io
-import os
 
 # Download the model weights if not already downloaded
 def download_model():
@@ -143,9 +223,13 @@ def main():
         # Run the model on the uploaded image and show results
         results = run_inference(model, uploaded_image)
         
-        # Show results (you can modify this based on how results are returned)
-        st.write(f"Predicted Labels: {results.names}")
-        st.write(f"Prediction Results: {results.xywh[0]}")  # This shows the prediction results
+        # Accessing the predicted class names and bounding boxes
+        predicted_labels = results.names  # The class names
+        predicted_coordinates = results.xywh[0]  # Bounding box coordinates
+
+        # Display predicted labels
+        st.write(f"Predicted Labels: {predicted_labels}")
+        st.write(f"Prediction Coordinates: {predicted_coordinates}")  # Bounding boxes
 
         # You can visualize the output like bounding boxes here:
         img_with_boxes = results.render()  # Add bounding boxes to image
