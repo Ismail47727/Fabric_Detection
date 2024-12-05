@@ -222,21 +222,25 @@ def main():
 
         # Run the model on the uploaded image and show results
         results = run_inference(model, uploaded_image)
-        
-        # Ensure we're accessing the first result, as results is a list
-        result = results[0]  # Get the first result (if you only expect one image)
 
-        # Accessing the predicted class names and bounding boxes
-        predicted_labels = result.names  # The class names
-        predicted_coordinates = result.xywh[0]  # Bounding box coordinates
+        # Check if results are returned as a list (list of detected objects)
+        if isinstance(results, list):
+            # Access the first element of the list if only one image is being processed
+            result = results[0]
 
-        # Display predicted labels
-        st.write(f"Predicted Labels: {predicted_labels}")
-        st.write(f"Prediction Coordinates: {predicted_coordinates}")  # Bounding boxes
+            # Accessing the predicted class names and bounding boxes
+            predicted_labels = result.names  # The class names
+            predicted_coordinates = result.xywh[0]  # Bounding box coordinates
 
-        # You can visualize the output like bounding boxes here:
-        img_with_boxes = result.render()  # Add bounding boxes to image
-        st.image(img_with_boxes[0], caption="Detection Result", use_column_width=True)
+            # Display predicted labels
+            st.write(f"Predicted Labels: {predicted_labels}")
+            st.write(f"Prediction Coordinates: {predicted_coordinates}")  # Bounding boxes
+
+            # You can visualize the output like bounding boxes here:
+            img_with_boxes = result.render()  # Add bounding boxes to image
+            st.image(img_with_boxes[0], caption="Detection Result", use_column_width=True)
+        else:
+            st.write("No results returned, something went wrong.")
 
 # Run the app
 if __name__ == "__main__":
