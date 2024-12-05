@@ -5,7 +5,7 @@ import numpy as np
 from ultralytics import YOLO
 st.write('heelo world')
 MODEL_DIR = 'https://raw.githubusercontent.com/Ismail47727/Fabric_Detection/main/best.pt'
-'
+
 
 def main():
     # Load the YOLO model
