@@ -5,22 +5,21 @@ import numpy as np
 from ultralytics import YOLO
 st.write('heelo world')
 
-import requests
 
-url = 'https://github.com/Ismail47727/Fabric_Detection/raw/main/best.pt'
-response = requests.get(url)
-
-with open('best.pt', 'wb') as f:
-    f.write(response.content)
-
-MODEL_DIR = 'best.pt'  # Now use the downloaded file as the path
+# Function to download the model
+def download_model():
+    url = 'https://github.com/Ismail47727/Fabric_Detection/raw/main/best.pt'
+    response = requests.get(url)
+    with open('best.pt', 'wb') as f:
+        f.write(response.content)
 
 
 
-#MODEL_DIR = '/Users/ismailqayyum/Desktop/Sample1/Training/weights/best.pt'
+MODEL_DIR = 'best.pt'
 
 
 def main():
+    download_model()
     # Load the YOLO model
     model = YOLO(MODEL_DIR)
 
