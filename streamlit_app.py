@@ -27,6 +27,7 @@ if option == "Browse Image":
 
 elif option == "Real-time Video":
     st.warning("Ensure your webcam is enabled!")
+    model=0
     real_time_video(model)
 
 def inference_images(uploaded_file, model):
