@@ -93,6 +93,7 @@ from ultralytics import YOLO
 import streamlit as st
 from PIL import Image
 import io
+import os
 
 # Download the model weights if not already downloaded
 def download_model():
