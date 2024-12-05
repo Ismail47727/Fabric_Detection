@@ -167,81 +167,66 @@
 
 
 #-------------
-import os
-import requests
-import torch
-from ultralytics import YOLO
 import streamlit as st
 from PIL import Image
-import io
+import torch
+import requests
+import os
+from io import BytesIO
 
-# Download the model weights if not already downloaded
+# Function to download the model
 def download_model():
-    url = 'https://github.com/Ismail47727/Fabric_Detection/raw/main/best.pt'  # Model file URL
-    model_path = 'best.pt'
-    if not os.path.exists(model_path):  # Check if the model already exists
-        st.write("Downloading the model... This might take a while.")
-        response = requests.get(url)
-        with open(model_path, 'wb') as f:
+    model_url = "https://github.com/Ismail47727/Fabric_Detection/raw/main/best.pt"  # Update with your model's URL
+    model_path = "model.pt"
+    if not os.path.exists(model_path):
+        response = requests.get(model_url)
+        with open(model_path, "wb") as f:
             f.write(response.content)
-        st.write("Model downloaded successfully!")
     return model_path
 
-# Load YOLO model
+# Function to load the YOLO model
 def load_model(model_path):
-    model = YOLO(model_path)  # Load the model
+    model = torch.hub.load('ultralytics/yolov5', 'custom', path=model_path)  # Load custom YOLO model
     return model
 
-# Run predictions on the uploaded image
+# Run inference and process the results
 def run_inference(model, image):
-    # Convert image to bytes for processing
-    img = Image.open(image)
-    results = model(img)  # Make predictions with the model
+    results = model(image)
     return results
 
+# Main app function
 def main():
-    st.sidebar.header("Fabric Defect Detection with YOLOv8")
-    st.title("Fabric Defect Detection App")
+    st.title("Fabric Defect Detection with YOLO")
 
-    # Download the model at runtime if not already downloaded
-    model_path = download_model()
+    # Upload an image
+    uploaded_image = st.file_uploader("Upload an image", type=["jpg", "jpeg", "png"])
 
-    # Load the YOLO model
-    model = load_model(model_path)
+    if uploaded_image:
+        # Display uploaded image
+        image = Image.open(uploaded_image)
+        st.image(image, caption="Uploaded Image", use_column_width=True)
 
-    st.write("Upload an image to detect fabric defects...")
+        # Download and load the model
+        model_path = download_model()
+        model = load_model(model_path)
 
-    uploaded_image = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
-
-    if uploaded_image is not None:
-        # Show uploaded image
-        st.image(uploaded_image, caption="Uploaded Image", use_column_width=True)
-
-        # Run inference on the image
-        st.write("Classifying...")
-
-        # Run the model on the uploaded image and show results
+        # Run inference on the uploaded image
         results = run_inference(model, uploaded_image)
 
-        # Check if results are returned as a list (list of detected objects)
+        # Check if the result is a list (in case of batch processing)
         if isinstance(results, list):
-            # Access the first element of the list if only one image is being processed
-            result = results[0]
+            results = results[0]  # If it's a list, use the first result
 
-            # Accessing the predicted class names and bounding boxes
-            predicted_labels = result.names  # The class names
-            predicted_coordinates = result.xywh[0]  # Bounding box coordinates
+        # Get predicted labels and coordinates
+        predicted_labels = results.names  # Class names for detected objects
+        predicted_coordinates = results.xywh[0]  # Bounding box coordinates (for the first detection)
 
-            # Display predicted labels
-            st.write(f"Predicted Labels: {predicted_labels}")
-            st.write(f"Prediction Coordinates: {predicted_coordinates}")  # Bounding boxes
+        # Display predicted labels and coordinates
+        st.write(f"Predicted Labels: {predicted_labels}")
+        st.write(f"Predicted Coordinates: {predicted_coordinates}")
 
-            # You can visualize the output like bounding boxes here:
-            img_with_boxes = result.render()  # Add bounding boxes to image
-            st.image(img_with_boxes[0], caption="Detection Result", use_column_width=True)
-        else:
-            st.write("No results returned, something went wrong.")
+        # Display the results (optional)
+        st.write(f"Prediction Results:\n {results.pandas().xywh}")
 
-# Run the app
 if __name__ == "__main__":
     main()
