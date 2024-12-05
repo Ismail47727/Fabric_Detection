@@ -25,10 +25,9 @@ if option == "Browse Image":
         if uploaded_file.type.startswith('image'):
             inference_images(uploaded_file, model)
 
-elif option == "Real-time Video":
-    st.warning("Ensure your webcam is enabled!")
-    model=0
-    real_time_video(model)
+# elif option == "Real-time Video":
+#     st.warning("Ensure your webcam is enabled!")
+#     real_time_video(model)
 
 def inference_images(uploaded_file, model):
     image = Image.open(uploaded_file)
@@ -42,12 +41,12 @@ def inference_images(uploaded_file, model):
 
     st.image(plotted, caption="Detected Image", width=600)
 
-def real_time_video(model):
-    # Start video capture
-    cap = cv2.VideoCapture(0)  # 0 for the default camera, adjust for external cameras
+# def real_time_video(model):
+#     # Start video capture
+#     cap = cv2.VideoCapture(0)  # 0 for the default camera, adjust for external cameras
 
-    stframe = st.empty()  # Create a Streamlit container to hold video frames
-    st.button("Stop", key="stop_button")  # Placeholder for stopping (not implemented fully)
+#     stframe = st.empty()  # Create a Streamlit container to hold video frames
+#     st.button("Stop", key="stop_button")  # Placeholder for stopping (not implemented fully)
 
 #     while cap.isOpened():
 #         ret, frame = cap.read()
