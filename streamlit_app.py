@@ -168,65 +168,81 @@
 
 #-------------
 import streamlit as st
+import cv2
+import numpy as np
 from PIL import Image
-import torch
-import requests
+from ultralytics import YOLO
+import tempfile
 import os
-from io import BytesIO
 
-# Function to download the model
-def download_model():
-    model_url = "https://github.com/Ismail47727/Fabric_Detection/raw/main/best.pt"  # Update with your model's URL
-    model_path = "model.pt"
-    if not os.path.exists(model_path):
-        response = requests.get(model_url)
-        with open(model_path, "wb") as f:
-            f.write(response.content)
-    return model_path
-
-# Function to load the YOLO model
+# Make sure the model is loaded only once
+@st.cache_resource
 def load_model(model_path):
-    model = torch.hub.load('ultralytics/yolov5', 'custom', path=model_path)  # Load custom YOLO model
-    return model
+    return YOLO(model_path)
 
-# Run inference and process the results
-def run_inference(model, image):
-    results = model(image)
-    return results
-
-# Main app function
 def main():
-    st.title("Fabric Defect Detection with YOLO")
+    st.sidebar.header("Fabric Defect Detection using YOLOv8\nMembers:\n\n21K-3118\n\n21K-3010\n\n21K-3079\n\n21K-3115\n\n21K-3052\n\n DevOps Project")
+    st.title("Real-time Fabric Defect Detection")
+    st.write("""This app allows you to upload a fabric image or use your webcam for real-time fabric defect detection using the YOLOv8 model.""")
 
-    # Upload an image
-    uploaded_image = st.file_uploader("Upload an image", type=["jpg", "jpeg", "png"])
+    # Load the model (You can either use a local model or a URL)
+    model_path = "best.pt"  # Adjust this if using a different location or model URL
+    model = load_model(model_path)
 
-    if uploaded_image:
-        # Display uploaded image
-        image = Image.open(uploaded_image)
-        st.image(image, caption="Uploaded Image", use_column_width=True)
+    # Sidebar Options
+    option = st.sidebar.radio("Choose Input Method", ("Browse Image", "Real-time Video"))
 
-        # Download and load the model
-        model_path = download_model()
-        model = load_model(model_path)
+    if option == "Browse Image":
+        uploaded_file = st.file_uploader("Upload a Fabric Image", type=['jpg', 'jpeg', 'png'])
+        if uploaded_file:
+            if uploaded_file.type.startswith('image'):
+                inference_images(uploaded_file, model)
 
-        # Run inference on the uploaded image
-        results = run_inference(model, uploaded_image)
+    elif option == "Real-time Video":
+        st.warning("Ensure your webcam is enabled!")
+        real_time_video(model)
 
-        # Check if the result is a list (in case of batch processing)
-        if isinstance(results, list):
-            results = results[0]  # If it's a list, use the first result
+def inference_images(uploaded_file, model):
+    image = Image.open(uploaded_file)
+    st.image(image, caption="Uploaded Image", width=600)
+    
+    # Perform inference on the uploaded image
+    predict = model.predict(image)
+    boxes = predict[0].boxes
+    plotted = predict[0].plot()[:, :, ::-1]
 
-        # Get predicted labels and coordinates
-        predicted_labels = results.names  # Class names for detected objects
-        predicted_coordinates = results.xywh[0]  # Bounding box coordinates (for the first detection)
+    if len(boxes) == 0:
+        st.markdown("**No Detection**")
 
-        # Display predicted labels and coordinates
-        st.write(f"Predicted Labels: {predicted_labels}")
-        st.write(f"Predicted Coordinates: {predicted_coordinates}")
+    st.image(plotted, caption="Detected Image", width=600)
 
-        # Display the results (optional)
-        st.write(f"Prediction Results:\n {results.pandas().xywh}")
+def real_time_video(model):
+    # Start video capture
+    cap = cv2.VideoCapture(0)  # 0 for the default camera, adjust for external cameras
 
-if __name__ == "__main__":
+    stframe = st.empty()  # Create a Streamlit container to hold video frames
+    stop_button = st.button("Stop Video")  # Button to stop the video stream
+
+    while cap.isOpened():
+        if stop_button:
+            cap.release()
+            stframe.empty()
+            break
+
+        ret, frame = cap.read()
+        if not ret:
+            st.error("Failed to capture video frame.")
+            break
+
+        # Perform inference on the current frame
+        results = model.predict(frame)
+        plotted_frame = results[0].plot()
+
+        # Display the result in real-time
+        stframe.image(plotted_frame, channels="BGR", use_column_width=True)
+
+    cap.release()
+
+if __name__ == '__main__':
     main()
+
