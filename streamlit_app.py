@@ -16,8 +16,8 @@ st.write('heelo world')
 #     This app allows you to upload a fabric image or use your webcam for real-time fabric defect detection using the YOLOv8 model.
 #     """)
 
-#     # Sidebar Options
-#     option = st.sidebar.radio("Choose Input Method", ("Browse Image", "Real-time Video"))
+# Sidebar Options
+option = st.sidebar.radio("Choose Input Method", ("Browse Image", "Real-time Video"))
 
 if option == "Browse Image":
     uploaded_file = st.file_uploader("Upload a Fabric Image", type=['jpg', 'jpeg', 'png'])
