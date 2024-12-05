@@ -1,9 +1,9 @@
 # from PIL import Image
-# import streamlit as st
+import streamlit as st
 # import cv2
 # import numpy as np
 # from ultralytics import YOLO
-print('Hello world')
+st.write('heelo world')
 # MODEL_DIR = '/Users/ismailqayyum/Desktop/Sample1/Training/weights/best.pt'
 
 # def main():
