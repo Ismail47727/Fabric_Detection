@@ -181,7 +181,7 @@ def load_model(model_path):
     return YOLO(model_path)
 
 def main():
-    st.sidebar.header("Fabric Defect Detection using YOLOv8\nMembers:\n\n21K-3118\n\n21K-3010\n\n21K-3079\n\n21K-3115\n\n21K-3052\n\n DevOps Project")
+    st.sidebar.header("Fabric Defect Detection using YOLOv8\nMembers:\n\n21K-3118 Ismail Qayyum\n\n 21K-3010 Huzaifa Rajput \n\n21K-3079 Rayyan Ahmed \n\n21K-3115 Ghazanfar Adnan \n\n21K-3052 Abbass Altaf\n\n DevOps Project")
     st.title("Real-time Fabric Defect Detection")
     st.write("""This app allows you to upload a fabric image or use your webcam for real-time fabric defect detection using the YOLOv8 model.""")
 
