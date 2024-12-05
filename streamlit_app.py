@@ -4,12 +4,12 @@ import cv2
 import numpy as np
 from ultralytics import YOLO
 st.write('heelo world')
-#MODEL_DIR = 'https://raw.githubusercontent.com/Ismail47727/Fabric_Detection/main/best.pt'
+MODEL_DIR = 'https://raw.githubusercontent.com/Ismail47727/Fabric_Detection/main/best.pt'
 
 
 def main():
     # Load the YOLO model
-    #model = YOLO(MODEL_DIR)
+    model = YOLO(MODEL_DIR)
 
     st.sidebar.header("Fabric Defect Detection using YOLOv8\nMembers:\n\n21K-3118\n\n 21K-3010\n\n21K-3079\n\n21K-3115\n\n21K-3052\n\n DevOps Project")
     st.title("Real-time Fabric Defect Detection")
