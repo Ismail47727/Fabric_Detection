@@ -1,9 +1,9 @@
-# from PIL import Image
+from PIL import Image
 import streamlit as st
 import cv2
-# import numpy as np
-# from ultralytics import YOLO
-# st.write('heelo world')
+import numpy as np
+from ultralytics import YOLO
+st.write('heelo world')
 #MODEL_DIR = 'https://raw.githubusercontent.com/Ismail47727/Fabric_Detection/main/best.pt'
 
 
