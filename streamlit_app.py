@@ -19,11 +19,11 @@ st.write('heelo world')
 #     # Sidebar Options
 #     option = st.sidebar.radio("Choose Input Method", ("Browse Image", "Real-time Video"))
 
-    if option == "Browse Image":
-        uploaded_file = st.file_uploader("Upload a Fabric Image", type=['jpg', 'jpeg', 'png'])
-        if uploaded_file:
-            if uploaded_file.type.startswith('image'):
-                inference_images(uploaded_file, model)
+if option == "Browse Image":
+    uploaded_file = st.file_uploader("Upload a Fabric Image", type=['jpg', 'jpeg', 'png'])
+    if uploaded_file:
+        if uploaded_file.type.startswith('image'):
+            inference_images(uploaded_file, model)
 
 #     elif option == "Real-time Video":
 #         st.warning("Ensure your webcam is enabled!")
