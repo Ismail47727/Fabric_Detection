@@ -4,7 +4,20 @@ import cv2
 import numpy as np
 from ultralytics import YOLO
 st.write('heelo world')
-MODEL_DIR = '/Users/ismailqayyum/Desktop/Sample1/Training/weights/best.pt'
+
+import requests
+
+url = 'https://github.com/Ismail47727/Fabric_Detection/raw/main/best.pt'
+response = requests.get(url)
+
+with open('best.pt', 'wb') as f:
+    f.write(response.content)
+
+MODEL_DIR = 'best.pt'  # Now use the downloaded file as the path
+
+
+
+#MODEL_DIR = '/Users/ismailqayyum/Desktop/Sample1/Training/weights/best.pt'
 
 
 def main():
