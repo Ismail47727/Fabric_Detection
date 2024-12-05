@@ -19,27 +19,27 @@ st.write('heelo world')
 #     # Sidebar Options
 #     option = st.sidebar.radio("Choose Input Method", ("Browse Image", "Real-time Video"))
 
-#     if option == "Browse Image":
-#         uploaded_file = st.file_uploader("Upload a Fabric Image", type=['jpg', 'jpeg', 'png'])
-#         if uploaded_file:
-#             if uploaded_file.type.startswith('image'):
-#                 inference_images(uploaded_file, model)
+    if option == "Browse Image":
+        uploaded_file = st.file_uploader("Upload a Fabric Image", type=['jpg', 'jpeg', 'png'])
+        if uploaded_file:
+            if uploaded_file.type.startswith('image'):
+                inference_images(uploaded_file, model)
 
 #     elif option == "Real-time Video":
 #         st.warning("Ensure your webcam is enabled!")
 #         real_time_video(model)
 
-# def inference_images(uploaded_file, model):
-#     image = Image.open(uploaded_file)
-#     # Perform inference on the uploaded image
-#     predict = model.predict(image)
-#     boxes = predict[0].boxes
-#     plotted = predict[0].plot()[:, :, ::-1]
+def inference_images(uploaded_file, model):
+    image = Image.open(uploaded_file)
+    # Perform inference on the uploaded image
+    predict = model.predict(image)
+    boxes = predict[0].boxes
+    plotted = predict[0].plot()[:, :, ::-1]
 
-#     if len(boxes) == 0:
-#         st.markdown("**No Detection**")
+    if len(boxes) == 0:
+        st.markdown("**No Detection**")
 
-#     st.image(plotted, caption="Detected Image", width=600)
+    st.image(plotted, caption="Detected Image", width=600)
 
 # def real_time_video(model):
 #     # Start video capture
