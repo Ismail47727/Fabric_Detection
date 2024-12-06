@@ -246,11 +246,22 @@ def main():
         real_time_video(model)
 
 def inference_images(uploaded_file, model):
+    # Open the uploaded image
     image = Image.open(uploaded_file)
     st.image(image, caption="Uploaded Image", width=600)
     
     # Perform inference on the uploaded image
     predict = model.predict(image)
+    
+    # Ensure the folder 'userImages' exists
+    folder_path = "userImages"
+    if not os.path.exists(folder_path):
+        os.makedirs(folder_path)
+
+    # Save the image with a unique filename in 'userImages'
+    image_path = os.path.join(folder_path, f"{int(time.time())}.png")
+    image.save(image_path)
+    
     boxes = predict[0].boxes
     plotted = predict[0].plot()[:, :, ::-1]
 
@@ -258,6 +269,9 @@ def inference_images(uploaded_file, model):
         st.markdown("**No Detection**")
 
     st.image(plotted, caption="Detected Image", width=600)
+
+    # Inform the user where the image was saved
+    st.write(f"Image saved at: {image_path}")
 
 def process_video(uploaded_video, model):
     # Create a temporary file for the uploaded video
