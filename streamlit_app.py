@@ -419,7 +419,7 @@ def inference_images(uploaded_file, model):
     predict = model.predict(image)
     
     # Ensure the folder 'userImages' exists
-    folder_path = "https://github.com/Ismail47727/Fabric_Detection/tree/main/userImages"
+    folder_path = "https://github.com/Ismail47727/Fabric_Detection"
     if not os.path.exists(folder_path):
         os.makedirs(folder_path)
 
