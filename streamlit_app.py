@@ -224,7 +224,7 @@ def main():
     st.write("""This app allows you to upload a fabric image, video, or use your webcam for real-time fabric defect detection using the YOLOv8 model.""")
 
     # Load the model (You can either use a local model or a URL)
-    model_path = "best.pt"  # Adjust this if using a different location or model URL
+    model_path = "best2.pt"  # Adjust this if using a different location or model URL
     model = load_model(model_path)
 
     # Sidebar Options
